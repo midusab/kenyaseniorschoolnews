@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Theme adjustments */
+  --color-brand-primary: #15803d; /* Safari/Rich Forest Green */
+  --color-brand-accent: #b45309; /* Deep Kenyan Amber/Gold */
+  --color-brand-danger: #be123c; /* Kenyan Shield Red */
+  --color-brand-dark: #121812; /* Foresty Charcoal tint */
+}
+
+/* Base custom styles to guarantee a highly polished custom aesthetic */
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Custom hide scrollbar utilities for tickers and filter scrolls */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

@@ -1,0 +1,6 @@
+{
+  "name": "Kenya Senior School News Network",
+  "description": "A verified national news and announcement platform for Kenyan senior schools, covering events, sports, achievements, scholarship updates, and Grade 10 CBC Pathway selections.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
