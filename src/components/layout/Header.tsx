@@ -43,12 +43,12 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="border-b border-blue-100 bg-white shadow-xs" id="kssnn-header">
+    <header className="sticky top-0 z-50 border-b border-white/20 bg-white/70 backdrop-blur-xl shadow-liquid" id="kssnn-header">
       {/* Top Ministry Portal Tape */}
-      <div className="bg-blue-900 px-4 py-2 text-xs text-blue-100 sm:px-6 md:flex md:items-center md:justify-between" id="top-portal-strip">
+      <div className="glass-liquid-dark px-4 py-2 text-xs text-blue-100 sm:px-6 md:flex md:items-center md:justify-between" id="top-portal-strip">
         <div className="flex items-center space-x-2 font-mono">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
-          <span className="text-emerald-300">MOE & CBENT CERTIFIED DIGITAL PORTAL</span>
+          <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+          <span className="text-emerald-300 font-bold tracking-tight">MOE & CBENT CERTIFIED DIGITAL PORTAL</span>
         </div>
         <div className="mt-1 flex items-center justify-between space-x-4 font-mono sm:mt-0 md:justify-end">
           <div className="flex items-center space-x-1">
@@ -56,42 +56,42 @@ export default function Header() {
             <span>Nairobi HQ: 2026-05-26 | {timeStr || '9:21 AM'}</span>
           </div>
           <span className="hidden leading-none text-blue-450 md:inline">|</span>
-          <span className="text-emerald-450 font-semibold flex items-center gap-1">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> VERIFIED OUTLET
+          <span className="text-emerald-400 font-semibold flex items-center gap-1">
+            <ShieldCheck className="h-3.5 w-3.5" /> VERIFIED OUTLET
           </span>
         </div>
       </div>
 
       {/* Main Branding Header Row */}
-      <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8" id="header-brand-section">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8" id="header-brand-section">
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div>
-            <div className="flex items-center space-x-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md">
-                <Radio className="h-5.5 w-5.5 text-emerald-300" />
+            <div className="flex items-center space-x-3">
+              <div className="liquid-shine flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/20">
+                <Radio className="h-6 w-6 text-emerald-300" />
               </div>
               <div>
-                <h1 className="font-display text-2xl font-bold tracking-tight text-blue-950 sm:text-3xl">
-                  KSSNN <span className="text-blue-600 font-normal">News Network</span>
+                <h1 className="font-display text-2xl font-black tracking-tighter text-slate-900 sm:text-3xl">
+                  KSSNN <span className="text-blue-600 font-medium">Network</span>
                 </h1>
-                <p className="text-xs text-gray-500 max-w-md">
-                  Kenya Senior School News Network — Official updates, sports, and CBC pathways
+                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-widest">
+                  Verified Senior School Broadcast
                 </p>
               </div>
             </div>
           </div>
 
           {/* Role selector dropdown wrapper */}
-          <div className="w-full sm:w-auto flex flex-col items-start gap-1">
-            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider font-mono flex items-center gap-1">
-              <Users className="h-3 w-3 text-blue-500" /> Select Your Account View:
+          <div className="w-full sm:w-auto flex flex-col items-start gap-1.5">
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] font-mono flex items-center gap-1.5">
+              <Users className="h-3 w-3 text-blue-500" /> Perspective Engine
             </span>
-            <div className="relative inline-block w-full sm:w-64">
+            <div className="relative inline-block w-full sm:w-72">
               <select
                 id="role-selector-dropdown"
                 value={currentRole}
                 onChange={(e) => setCurrentRole(e.target.value as UserRole)}
-                className="block w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-blue-900 shadow-xs outline-hidden transition hover:border-blue-300 focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                className="block w-full rounded-xl border border-slate-200 bg-white/50 px-4 py-2.5 text-xs font-bold text-slate-800 shadow-sm backdrop-blur-md transition-all hover:border-blue-400 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
               >
                 {roles.map((r) => (
                   <option key={r.id} value={r.id}>
@@ -100,28 +100,26 @@ export default function Header() {
                 ))}
               </select>
             </div>
-            <p className="text-[11px] text-blue-800 font-medium">
-              Mode: {roles.find((r) => r.id === currentRole)?.desc}
-            </p>
           </div>
         </div>
       </div>
 
       {/* Real-time Ticker Ribbon */}
-      <div className="bg-red-700 px-4 py-2 border-y border-red-800/20 text-xs font-medium text-white" id="announcement-ticker-ribbon">
-        <div className="mx-auto max-w-7xl flex items-center space-x-3">
-          <span className="flex items-center space-x-1 uppercase text-[10px] font-mono tracking-wider font-bold bg-white text-red-700 rounded px-2 py-0.5 whitespace-nowrap">
-            <Radio className="h-3 w-3 inline" /> BREAKING UPDATES
+      <div className="glass-liquid border-y border-blue-100/30 px-4 py-2.5 text-[11px] font-bold text-slate-800" id="announcement-ticker-ribbon">
+        <div className="mx-auto max-w-7xl flex items-center space-x-4">
+          <span className="flex items-center space-x-1.5 uppercase text-[9px] font-mono tracking-widest font-black bg-blue-600 text-white rounded-full px-3 py-1 whitespace-nowrap shadow-md shadow-blue-600/20">
+            <Radio className="h-3 w-3 inline" /> LIVE FEED
           </span>
-          <div className="overflow-hidden relative w-full h-5">
-            <div className="absolute left-0 top-0 w-full transition-all duration-500 ease-in-out">
-              <p className="truncate hover:underline cursor-pointer">
-                {tickers[tickerIndex]}
+          <div className="overflow-hidden relative w-full h-5 flex items-center">
+            <div className="absolute left-0 w-full transition-all duration-700 ease-in-out">
+              <p className="truncate text-slate-600 font-medium tracking-tight italic">
+                "{tickers[tickerIndex]}"
               </p>
             </div>
           </div>
         </div>
       </div>
     </header>
+
   );
 }

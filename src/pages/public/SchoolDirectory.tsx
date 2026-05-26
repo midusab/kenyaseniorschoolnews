@@ -3,18 +3,31 @@ import { School } from '../../types';
 import { schoolService } from '../../services/schoolService';
 import SchoolCard from '../../components/cards/SchoolCard';
 import { Search, HelpCircle } from 'lucide-react';
+import Loader from '../../components/ui/Loader';
 
 export default function SchoolDirectory() {
   const [schools, setSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCounty, setSelectedCounty] = useState('all');
   const [selectedPathway, setSelectedPathway] = useState('all');
   const [counties, setCounties] = useState<string[]>([]);
 
   useEffect(() => {
-    schoolService.getSchools().then((data) => setSchools(data));
-    schoolService.getCounties().then((data) => setCounties(data));
+    setLoading(true);
+    Promise.all([
+      schoolService.getSchools(),
+      schoolService.getCounties()
+    ]).then(([schoolsData, countiesData]) => {
+      setSchools(schoolsData);
+      setCounties(countiesData);
+      setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return <Loader label="Syncing school registry data..." size={32} className="py-32" />;
+  }
 
   const filteredSchools = schools.filter((sch) => {
     const matchesQuery = 

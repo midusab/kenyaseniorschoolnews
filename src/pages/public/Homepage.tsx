@@ -4,25 +4,35 @@ import { articleService } from '../../services/articleService';
 import { schoolService } from '../../services/schoolService';
 import { NewsArticle, School } from '../../types';
 import { Search, MapPin, Grid, Compass, BookOpen, Clock, ShieldCheck, ArrowUpRight, HelpCircle, Radio, Sparkles } from 'lucide-react';
+import Loader from '../../components/ui/Loader';
 
 interface HomepageProps {
-  onNavigate?: (tab: 'home' | 'schools' | 'news' | 'counties' | 'categories' | 'login' | 'admin') => void;
-  onSelectArticle?: (id: string) => void;
-  onSelectCounty?: (county: string) => void;
-  onSelectCategory?: (category: string) => void;
+  // Navigation props replaced by local navigate hook for React Router compatibility
 }
 
-export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, onSelectCategory }: HomepageProps) {
+export default function Homepage({}: HomepageProps) {
   const navigate = useNavigate();
   const [articles, setArticles] = useState<NewsArticle[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCountyFilter, setSelectedCountyFilter] = useState('all');
 
   useEffect(() => {
-    articleService.getArticles().then((data) => setArticles(data));
-    schoolService.getSchools().then((data) => setSchools(data));
+    setLoading(true);
+    Promise.all([
+      articleService.getArticles(),
+      schoolService.getSchools()
+    ]).then(([articlesData, schoolsData]) => {
+      setArticles(articlesData);
+      setSchools(schoolsData);
+      setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return <Loader label="Retrieving latest portal broadcast..." size={32} className="py-32" />;
+  }
 
   // Helper and data mapping
   const activeCounties = ['Nairobi', 'Kiambu', 'Kisumu', 'Nandi', 'Bungoma'];
@@ -59,43 +69,51 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
   };
 
   return (
-    <div className="space-y-10 animate-fade-in" id="homepage-container">
-      {/* 2. Search Bar & Suggestions Banner */}
-      <div className="rounded-2xl bg-gradient-to-br from-blue-900 via-slate-900 to-red-950 text-white p-6 sm:p-10 shadow-lg relative overflow-hidden" id="homepage-search-hero">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(220,38,38,0.12),transparent)]"></div>
-        <div className="relative max-w-2xl space-y-4">
-          <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white font-mono border border-red-500 shadow-sm">
-            <Radio className="h-3.5 w-3.5" /> LIVE: OFFICIAL KSSNN FEED
+    <div className="space-y-10 animate-fade-in relative px-1 lg:px-4" id="homepage-container">
+      {/* Background radial accent for depth */}
+      <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-100/30 rounded-full blur-[120px] -z-10 animate-pulse"></div>
+      <div className="absolute top-1/2 -right-32 w-80 h-80 bg-emerald-100/20 rounded-full blur-[100px] -z-10"></div>
+
+      {/* 2. Search Bar & Suggestions Banner - Liquid Glass Style */}
+      <div className="rounded-[2.5rem] glass-liquid p-8 sm:p-12 shadow-liquid relative overflow-hidden group" id="homepage-search-hero">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-red-600/5"></div>
+        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl group-hover:bg-blue-300/30 transition-colors duration-1000"></div>
+        
+        <div className="relative max-w-2xl space-y-5">
+          <span className="inline-flex items-center gap-2 rounded-full glass-liquid-dark px-4 py-1.5 text-[10px] font-black text-white font-mono border-white/20 shadow-lg tracking-widest">
+            <Radio className="h-3.5 w-3.5 text-emerald-400" /> SYSTEM STATUS: BROADCASTING
           </span>
-          <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-            Find Kenyan Senior School Updates Instantly
+          <h2 className="font-display text-3xl sm:text-5xl font-black tracking-tighter leading-[0.95] text-slate-900">
+            Intelligent <span className="text-blue-600">School News</span> Network for 2026.
           </h2>
-          <p className="text-xs sm:text-sm text-blue-200 leading-relaxed max-w-lg">
-            Access verified news bulletins, Grade 10 competence pathway audits, and certified county registrations on a single unified portal.
+          <p className="text-sm font-medium text-slate-500 leading-relaxed max-w-lg">
+            A fluid, real-time portal for verified school updates, Grade 10 CBC pathway certificates, and certified institution registrations.
           </p>
 
           {/* Search container */}
-          <form onSubmit={executeSearch} className="relative mt-6" id="homepage-search-input-box">
-            <Search className="absolute left-4 top-3.5 h-5 w-5 text-slate-400" />
+          <form onSubmit={executeSearch} className="relative mt-8" id="homepage-search-input-box">
+            <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-slate-400" />
+            </div>
             <input
               type="text"
-              placeholder='Search by school name, county, news, or category (e.g., "Maranda", "Nairobi", "Sports")'
+              placeholder='Search ecosystem: "Maseno School", "STEM Pathway", "Kitale"...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border border-blue-800/80 bg-slate-900/90 py-3.5 pl-11 pr-5 text-sm text-white placeholder-slate-400 focus:border-emerald-400 focus:bg-slate-900 focus:ring-1 focus:ring-emerald-400 outline-none shadow-inner"
+              className="w-full rounded-2xl border border-white/40 bg-white/60 backdrop-blur-md py-4.5 pl-12 pr-6 text-sm font-bold text-slate-900 placeholder-slate-400 focus:border-blue-500/50 focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none shadow-liquid transition-all"
             />
           </form>
 
-          {/* Suggestions row to answer: What should I click next? */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs" id="quick-searches-list">
-            <span className="text-slate-400 font-medium whitespace-nowrap">Try searching:</span>
-            {['Alliance', 'Nairobi', 'Sports', 'Scholarship'].map((tag) => (
+          {/* Suggestions row */}
+          <div className="flex flex-wrap items-center gap-3 pt-3 text-[10px]" id="quick-searches-list">
+            <span className="text-slate-400 font-extrabold uppercase tracking-widest">Trending Hubs:</span>
+            {['Alliance', 'STEM', 'Maseno', 'Innovation'].map((tag) => (
               <button
                 key={tag}
                 onClick={() => handleSearchExample(tag)}
-                className="rounded-lg bg-blue-900/60 hover:bg-blue-850 px-3 py-1 font-mono text-[11px] text-emerald-300 border border-blue-800/50 hover:border-emerald-500/30 transition-all cursor-pointer"
+                className="rounded-full glass-liquid px-4 py-1.5 font-bold text-slate-700 hover:text-blue-700 hover:border-blue-400 transition-all cursor-pointer shadow-sm"
               >
-                "{tag}"
+                {tag}
               </button>
             ))}
           </div>
@@ -103,69 +121,74 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
       </div>
 
       {/* Primary Workspace Section: Home Grid Layout */}
-      <div className="grid gap-8 lg:grid-cols-3" id="homepage-content-grid">
+      <div className="grid gap-8 lg:grid-cols-12" id="homepage-content-grid">
         {/* Left/Middle Column: News Flow (Featured & Latest) */}
-        <div className="lg:col-span-2 space-y-8" id="news-flow-section">
+        <div className="lg:col-span-8 space-y-10" id="news-flow-section">
           {/* 3. Featured News Article */}
           {featuredArticle && (
-            <div className="space-y-4" id="section-featured-headline">
-              <div className="flex items-center justify-between border-b border-gray-150 pb-2">
-                <h3 className="font-display text-sm font-bold tracking-wider text-slate-900 uppercase flex items-center gap-1.5/70">
-                  <span className="h-2 w-2 rounded-full bg-red-600"></span>
-                  FEATURED BULLETIN
+            <div className="space-y-6" id="section-featured-headline">
+              <div className="flex items-center justify-between border-b border-slate-100/50 pb-3">
+                <h3 className="font-display text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]"></span>
+                  GLOBAL BROADCAST SELECTION
                 </h3>
                 <button
-                  onClick={() => onNavigate('news')}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer"
+                  onClick={() => navigate('/news')}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 cursor-pointer transition-all hover:gap-2"
                 >
-                  View All News <ArrowUpRight className="h-3.5 w-3.5" />
+                  Explore Bulletin <ArrowUpRight className="h-3.5 w-3.5" />
                 </button>
               </div>
 
-              <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-xs group transition hover:border-blue-200 hover:shadow-md">
+              <div className="overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 backdrop-blur-md shadow-liquid group transition-all duration-500 hover:shadow-shadow-liquid-hover">
                 {featuredArticle.image && (
-                  <div className="relative h-60 sm:h-80 bg-slate-100 overflow-hidden">
+                  <div className="relative h-64 sm:h-96 bg-slate-100 overflow-hidden">
                     <img
                       src={featuredArticle.image}
                       alt={featuredArticle.title}
                       referrerPolicy="no-referrer"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-102"
+                      className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
-                    <div className="absolute top-4 left-4 flex gap-2">
-                      <div className="bg-emerald-600 text-white font-mono font-bold text-[10px] uppercase rounded px-2.5 py-1 tracking-wider flex items-center gap-1 shadow-md">
-                         <Sparkles className="h-3 w-3" /> Featured update
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                    <div className="absolute top-6 left-6 flex gap-2">
+                      <div className="glass-liquid py-1.5 px-4 text-white font-mono font-black text-[9px] uppercase rounded-full tracking-[0.1em] flex items-center gap-2 shadow-xl border-white/30">
+                         <Sparkles className="h-3 w-3 text-emerald-300" /> FEATURED SELECTION
                       </div>
                     </div>
                   </div>
                 )}
-                <div className="p-6 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-mono text-slate-500 font-semibold">
-                    <span className="font-bold text-blue-800 uppercase bg-blue-55 rounded px-2 py-0.5">{featuredArticle.category}</span>
-                    <span>•</span>
+                <div className="p-8 space-y-5">
+                  <div className="flex items-center gap-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">
+                    <span className="bg-blue-600 text-white rounded-full px-4 py-1 shadow-lg shadow-blue-500/20">{featuredArticle.category}</span>
+                    <span className="h-1 w-1 rounded-full bg-slate-300"></span>
                     <span>{featuredArticle.date}</span>
-                    <span>•</span>
-                    <span className="text-emerald-700 flex items-center gap-0.5"><MapPin className="h-3 w-3" /> {schools.find(s => s.id === featuredArticle.schoolId)?.county || 'Nairobi HQ'}</span>
+                    <span className="h-1 w-1 rounded-full bg-slate-300"></span>
+                    <span className="text-emerald-600 flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> {schools.find(s => s.id === featuredArticle.schoolId)?.county || 'Nairobi'}</span>
                   </div>
 
-                  <h4 className="font-display text-lg sm:text-2xl font-bold tracking-tight text-slate-900 group-hover:text-blue-800 transition-colors">
+                  <h4 className="font-display text-2xl sm:text-4xl font-black tracking-tighter text-slate-900 leading-[1.1] group-hover:text-blue-700 transition-colors">
                     {featuredArticle.title}
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans line-clamp-3">
+                  <p className="text-sm sm:text-base text-slate-500 leading-relaxed font-medium line-clamp-3">
                     {featuredArticle.summary}
                   </p>
 
-                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-slate-900 font-mono block tracking-wide">{featuredArticle.schoolName}</p>
-                      <p className="text-[10px] text-slate-500">By. {featuredArticle.authorName} ({featuredArticle.authorRole})</p>
+                  <div className="pt-6 border-t border-slate-100/60 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-400">
+                        {featuredArticle.authorName.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="text-xs font-black text-slate-900 uppercase tracking-tight">{featuredArticle.schoolName}</p>
+                        <p className="text-[10px] font-bold text-slate-400">Broadcaster: {featuredArticle.authorName}</p>
+                      </div>
                     </div>
                     <button
-                      onClick={() => onSelectArticle(featuredArticle.id)}
-                      className="rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+                      onClick={() => navigate(`/news/${featuredArticle.id}`)}
+                      className="liquid-shine rounded-2xl bg-slate-950 hover:bg-black text-white font-bold text-xs px-8 py-4 shadow-xl transition-all cursor-pointer flex items-center gap-2 group/btn active:scale-95"
                     >
-                      <span>Read Article</span>
-                      <BookOpen className="h-4 w-4" />
+                      <span>Read Bulletin</span>
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
                     </button>
                   </div>
                 </div>
@@ -174,67 +197,67 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
           )}
 
           {/* 4. Latest News Feed list */}
-          <div className="space-y-4" id="section-latest-stories">
-            <h3 className="font-display text-sm font-bold tracking-wider text-slate-900 uppercase">
-              LATEST STORIES FLOW ({filteredArticles.length})
+          <div className="space-y-6" id="section-latest-stories">
+            <h3 className="font-display text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase">
+              RECENT BROADCASTS SELECTION ({filteredArticles.length})
             </h3>
 
             {latestArticles.length === 0 && !featuredArticle ? (
-              <div className="rounded-xl border border-dashed border-gray-200 bg-white p-12 text-center" id="homepage-empty-state">
-                <HelpCircle className="mx-auto h-12 w-12 text-gray-300" />
-                <h4 className="mt-4 text-sm font-bold text-gray-900">No School bulletins match your search</h4>
-                <p className="mt-1 text-xs text-gray-500 max-w-sm mx-auto">
+              <div className="rounded-[2rem] border border-dashed border-slate-200 bg-white/40 backdrop-blur-sm p-12 text-center" id="homepage-empty-state">
+                <HelpCircle className="mx-auto h-12 w-12 text-slate-300" />
+                <h4 className="mt-4 text-sm font-bold text-slate-900">No School bulletins match your search</h4>
+                <p className="mt-1 text-xs text-slate-500 max-w-sm mx-auto">
                   Try checking other keywords or clear search filter to see accredited school bulletins.
                 </p>
                 <button
                   onClick={() => setSearchTerm('')}
-                  className="mt-4 rounded-lg bg-blue-55 text-blue-800 text-xs font-bold px-4 py-2 hover:bg-blue-100 transition-all cursor-pointer"
+                  className="mt-4 rounded-xl bg-blue-50 text-blue-800 text-xs font-bold px-6 py-3 hover:bg-blue-100 transition-all cursor-pointer"
                 >
                   Clear Search Filter
                 </button>
               </div>
             ) : (
-              <div className="grid gap-5 md:grid-cols-1" id="latest-news-stack">
+              <div className="grid gap-6 md:grid-cols-1" id="latest-news-stack">
                 {latestArticles.map((art) => {
                   const sCounty = schools.find((s) => s.id === art.schoolId)?.county || 'National HQ';
                   return (
                     <div
                       key={art.id}
-                      className="rounded-xl border border-slate-150/50 bg-white p-4 flex flex-col sm:flex-row gap-4 hover:shadow-xs transition hover:border-blue-200 group"
+                      className="rounded-[1.5rem] border border-white/60 bg-white/40 backdrop-blur-md p-5 flex flex-col sm:flex-row gap-5 hover:shadow-liquid transition-all duration-300 hover:-translate-y-1 group"
                     >
                       {art.image && (
-                        <div className="h-28 w-full sm:w-40 bg-slate-100 rounded-lg overflow-hidden shrink-0">
+                        <div className="h-32 w-full sm:w-48 bg-slate-100 rounded-2xl overflow-hidden shrink-0 shadow-sm">
                           <img
                             src={art.image}
                             alt={art.title}
                             referrerPolicy="no-referrer"
-                            className="h-full w-full object-cover group-hover:scale-103 transition-transform duration-500"
+                            className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
                           />
                         </div>
                       )}
-                      <div className="flex-1 flex flex-col justify-between space-y-2">
+                      <div className="flex-1 flex flex-col justify-between space-y-3">
                         <div>
-                          <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-500 font-semibold">
-                            <span className="text-blue-900 uppercase font-bold">{art.category}</span>
-                            <span>•</span>
-                            <span className="text-emerald-700 font-semibold">{sCounty}</span>
-                            <span>•</span>
+                          <div className="flex items-center gap-2.5 text-[9px] font-black font-mono text-slate-400 tracking-widest uppercase">
+                            <span className="text-blue-600">{art.category}</span>
+                            <span className="h-1 w-1 rounded-full bg-slate-200"></span>
+                            <span className="text-emerald-600">{sCounty}</span>
+                            <span className="h-1 w-1 rounded-full bg-slate-200"></span>
                             <span>{art.date}</span>
                           </div>
-                          <h5 className="font-display text-sm sm:text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1 mt-1">
+                          <h5 className="font-display text-base sm:text-lg font-black text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1 mt-1 tracking-tight">
                             {art.title}
                           </h5>
-                          <p className="text-xs text-slate-500 font-sans line-clamp-2 mt-1">
+                          <p className="text-xs text-slate-500 font-medium line-clamp-2 mt-1 leading-relaxed">
                             {art.summary}
                           </p>
                         </div>
-                        <div className="flex items-center justify-between pt-2 border-t border-slate-50">
-                          <span className="text-[10px] font-bold text-slate-700 block max-w-xs truncate">{art.schoolName}</span>
+                        <div className="flex items-center justify-between pt-3 border-t border-slate-100/40">
+                          <span className="text-[10px] font-black text-slate-800 uppercase tracking-tighter block max-w-xs truncate">{art.schoolName}</span>
                           <button
-                            onClick={() => onSelectArticle(art.id)}
-                            className="rounded bg-blue-50 group-hover:bg-blue-600 px-3 py-1.5 text-xs font-semibold text-blue-900 group-hover:text-white transition-colors cursor-pointer"
+                            onClick={() => navigate(`/news/${art.id}`)}
+                            className="rounded-full bg-slate-100 group-hover:bg-blue-600 px-4 py-2 text-[10px] font-black text-slate-900 group-hover:text-white transition-all cursor-pointer uppercase tracking-widest shadow-sm"
                           >
-                            Read Article
+                            Read More
                           </button>
                         </div>
                       </div>
@@ -246,79 +269,64 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
           </div>
         </div>
 
-        {/* Right Side Column: Fast Filters, Pathways and Counties Quick Access */}
-        <div className="space-y-8" id="right-fast-widgets">
+        {/* Right Side Column: Fast Widgets */}
+        <div className="lg:col-span-4 space-y-10" id="right-fast-widgets">
           {/* 5. School Categories / CBE Pathways */}
-          <div className="rounded-2xl border border-slate-150/60 bg-white p-5 shadow-2xs space-y-4" id="section-cbe-categories">
-            <h3 className="font-display text-xs font-bold tracking-widest text-slate-500 uppercase flex items-center gap-1.5">
+          <div className="rounded-[2rem] border border-white/60 bg-white/40 backdrop-blur-md p-6 shadow-liquid space-y-5" id="section-cbe-categories">
+            <h3 className="font-display text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase flex items-center gap-2">
               <Compass className="h-4.5 w-4.5 text-blue-600" />
-              ACCELERATED PATHWAYS
+              PATHWAY AUDITORS
             </h3>
-            <p className="text-[11.5px] text-slate-550 leading-relaxed font-sans">
-              Choose an educational career pathway to explore specialized subjects, track requirements, and search affiliated institutions.
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">
+              Explore specialized subjects, track Grade 10 requirements, and search affiliated institutions.
             </p>
 
-            <div className="grid gap-3" id="cbe-pathways-brief-list">
+            <div className="grid gap-4" id="cbe-pathways-brief-list">
               {[
                 {
                   id: 'STEM',
-                  label: 'Science & Technology (STEM)',
-                  desc: 'Includes robotics, chemistry, aviation math and computer design matrices.',
-                  color: 'hover:border-blue-500 hover:bg-blue-50/20 text-blue-900',
-                  badge: 'Pure & Applied Science'
+                  label: 'Science & Technology',
+                  color: 'hover:border-blue-500 hover:bg-blue-50/40 text-blue-900',
+                  badge: 'Pure Science'
                 },
                 {
                   id: 'Social Sciences',
-                  label: 'Social Sciences & Humanities',
-                  desc: 'Designed for legal theory, policies, journalism, and modern business structures.',
-                  color: 'hover:border-emerald-500 hover:bg-emerald-50/20 text-emerald-900',
-                  badge: 'Languages & Laws'
+                  label: 'Social Sciences',
+                  color: 'hover:border-emerald-500 hover:bg-emerald-50/40 text-emerald-900',
+                  badge: 'Law & Ethics'
                 },
                 {
                   id: 'Arts & Sports Science',
-                  label: 'Arts & Sports Science',
-                  desc: 'Unlocking theatrical fine arts, sports medicine diagnostics, and football analytics.',
-                  color: 'hover:border-red-500 hover:bg-red-50/20 text-red-900',
-                  badge: 'Creative & Athletics'
+                  label: 'Arts & Sports',
+                  color: 'hover:border-red-500 hover:bg-red-50/40 text-red-900',
+                  badge: 'Creative'
                 }
               ].map((path) => (
                 <div
                   key={path.id}
-                  onClick={() => onSelectCategory(path.id)}
-                  className={`p-4 rounded-xl border border-slate-100 bg-slate-50/50 cursor-pointer transition-all hover:-translate-y-0.5 ${path.color}`}
+                  onClick={() => navigate(`/categories/${path.id}`)}
+                  className={`p-5 rounded-2xl border border-slate-100/50 bg-white/50 cursor-pointer transition-all hover:scale-[1.02] active:scale-98 ${path.color} group shadow-sm`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">{path.badge}</span>
-                    <ArrowUpRight className="h-4 w-4 text-slate-400" />
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 font-mono">{path.badge}</span>
+                    <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-current transition-colors" />
                   </div>
-                  <h4 className="text-sm font-bold mt-1 font-display">
+                  <h4 className="text-sm font-black font-display tracking-tight">
                     {path.label}
                   </h4>
-                  <p className="text-[11px] text-slate-550 line-clamp-2 mt-1 leading-relaxed">
-                    {path.desc}
-                  </p>
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => onNavigate('categories')}
-              className="w-full text-center py-2 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer block border-t border-slate-50 pt-3"
-            >
-              Configure Pathway Planner
-            </button>
           </div>
 
           {/* 6. County Filter & Stat Index */}
-          <div className="rounded-2xl border border-slate-150/60 bg-white p-5 shadow-2xs space-y-4" id="section-county-filters">
-            <h3 className="font-display text-xs font-bold tracking-widest text-slate-500 uppercase flex items-center gap-1.5">
+          <div className="rounded-[2rem] border border-white/60 bg-white/40 backdrop-blur-md p-6 shadow-liquid space-y-5" id="section-county-filters">
+            <h3 className="font-display text-[10px] font-black tracking-[0.2em] text-slate-400 uppercase flex items-center gap-2">
               <MapPin className="h-4.5 w-4.5 text-emerald-600" />
-              COUNTY DIRECTORIES
+              COUNTY EXPLORER
             </h3>
-            <p className="text-[11.5px] text-slate-550 leading-relaxed">
-              Quickly filter school listings and educational statistics across the highlighted Kenyan digital counties.
-            </p>
-
-            <div className="flex flex-col gap-2" id="county-quick-filters">
+            
+            <div className="flex flex-col gap-3" id="county-quick-filters">
               {['all', ...activeCounties].map((ct) => {
                 const countOfSchools = ct === 'all' ? schools.length : schools.filter(s => s.county.toLowerCase() === ct.toLowerCase()).length;
                 const isSelected = selectedCountyFilter === ct;
@@ -327,32 +335,26 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
                     key={ct}
                     onClick={() => {
                       setSelectedCountyFilter(ct);
-                      onSelectCounty(ct);
+                      navigate(`/search?q=${ct}`);
                     }}
-                    className={`px-3 py-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between transition-all cursor-pointer ${
+                    className={`px-4 py-3 rounded-2xl border text-xs font-bold flex items-center justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                        : 'bg-slate-50/75 border-slate-100 text-slate-700 hover:border-slate-350 hover:bg-slate-100'
+                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg'
+                        : 'bg-white/50 border-slate-100 text-slate-800 hover:border-blue-200 hover:bg-white shadow-sm'
                     }`}
                   >
-                    <span className="capitalize">{ct === 'all' ? 'All Counties (Total)' : `${ct} County`}</span>
-                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-md font-mono ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'}`}>
-                      {countOfSchools} {countOfSchools === 1 ? 'School' : 'Schools'}
+                    <span className="capitalize">{ct === 'all' ? 'All Counties' : `${ct} HQ`}</span>
+                    <span className={`px-2 py-0.5 text-[9px] font-black rounded-full font-mono ${isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'}`}>
+                      {countOfSchools}
                     </span>
                   </button>
                 );
               })}
             </div>
-
-            <button
-              onClick={() => onNavigate('counties')}
-              className="w-full text-center py-2 text-xs font-bold text-emerald-600 hover:text-emerald-800 transition-colors cursor-pointer block border-t border-slate-50 pt-3"
-            >
-              View County Analytical Boards
-            </button>
           </div>
         </div>
       </div>
     </div>
   );
 }
+

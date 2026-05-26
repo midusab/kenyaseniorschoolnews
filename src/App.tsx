@@ -20,142 +20,75 @@ function AppContent() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex-1 w-full space-y-6" id="kssnn-main-content">
         
         {/* View Switcher Controls Header */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-gray-200 pb-4" id="view-tabs-hub">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-slate-100 pb-6" id="view-tabs-hub">
           {/* Main Visual Sub-Tabs - Mobile first grid layout with at least 44px tap targets */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:flex lg:flex-wrap gap-2 w-full lg:w-auto" id="main-view-tabs">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <Home className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>Home Hub</span>
-                </>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/schools"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <Landmark className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>Schools</span>
-                </>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/news"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <Newspaper className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>News Bulletin</span>
-                </>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <MapPin className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>My Dashboard</span>
-                </>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/categories/pathway"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <Compass className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>Categories</span>
-                </>
-              )}
-            </NavLink>
-
-            <NavLink
-              to="/login"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
-                isActive
-                  ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
-                  : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
-              }`}
-            >
-              {({ isActive }) => (
-                <>
-                  <UserCheck2 className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
-                  <span>Account</span>
-                </>
-              )}
-            </NavLink>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-3 w-full lg:w-auto" id="main-view-tabs">
+            {[
+              { to: "/", end: true, icon: Home, label: "Home Hub" },
+              { to: "/schools", icon: Landmark, label: "Institutions" },
+              { to: "/news", icon: Newspaper, label: "Bulletin" },
+              { to: "/dashboard", icon: MapPin, label: "Dashboard" },
+              { to: "/categories/pathway", icon: Compass, label: "Pathways" },
+              { to: "/login", icon: UserCheck2, label: "Account" }
+            ].map((link) => (
+              <NavLink
+                key={link.to}
+                to={link.to}
+                end={link.end}
+                className={({ isActive }) => `rounded-2xl px-5 py-3 text-[11px] font-black tracking-widest transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] uppercase ${
+                  isActive
+                    ? 'bg-slate-900 border-slate-900 text-white shadow-xl shadow-slate-900/10'
+                    : 'glass-liquid border-white/60 text-slate-500 hover:border-blue-400 hover:text-blue-700 hover:bg-white/80 shadow-sm'
+                }`}
+              >
+                {({ isActive }) => {
+                  const Icon = link.icon;
+                  return (
+                    <>
+                      <Icon className={`h-4 w-4 ${isActive ? 'text-white' : 'text-blue-600'}`} />
+                      <span>{link.label}</span>
+                    </>
+                  );
+                }}
+              </NavLink>
+            ))}
           </div>
 
           {/* Quick administrator launcher */}
-          <div className="flex items-center gap-2 font-sans shrink-0 w-full lg:w-auto" id="role-specific-actions-hub">
+          <div className="flex items-center gap-3 font-sans shrink-0 w-full lg:w-auto" id="role-specific-actions-hub">
             {isAdmin ? (
               <NavLink
                 to="/dashboard/articles/create"
-                className={({ isActive }) => `rounded-xl px-5 py-3.5 text-xs font-bold transition-all inline-flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer w-full lg:w-auto min-h-[44px] ${
+                className={({ isActive }) => `rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase tracking-widest transition-all inline-flex items-center justify-center space-x-2 shadow-xl cursor-pointer w-full lg:w-auto min-h-[44px] ${
                   isActive
-                    ? 'bg-red-700 hover:bg-red-800 border border-red-900 text-white'
-                    : 'bg-blue-700 hover:bg-blue-805 text-white border border-blue-800'
+                    ? 'bg-red-700 border-red-800 text-white'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white border-blue-700 shadow-blue-500/10'
                 }`}
               >
-                <div className="inline-block h-2.5 w-2.5 rounded-full bg-white shrink-0"></div>
                 <Radio className="h-4 w-4 text-white shrink-0" />
-                <span>Compose Official Update</span>
+                <span>COMPOSE BROADCAST</span>
               </NavLink>
             ) : isReporter ? (
               <NavLink
                 to="/dashboard/articles/create"
-                className={({ isActive }) => `rounded-xl px-5 py-3.5 text-xs font-bold transition-all inline-flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer w-full lg:w-auto min-h-[44px] ${
+                className={({ isActive }) => `rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase tracking-widest transition-all inline-flex items-center justify-center space-x-2 shadow-xl cursor-pointer w-full lg:w-auto min-h-[44px] ${
                   isActive
-                    ? 'bg-amber-600 hover:bg-amber-700 border border-amber-705 text-white'
-                    : 'bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-700'
+                    ? 'bg-emerald-700 border-emerald-800 text-white'
+                    : 'bg-indigo-600 hover:bg-indigo-700 text-white border-indigo-700 shadow-indigo-500/10'
                 }`}
               >
                 <FilePlus2 className="h-4 w-4 text-white shrink-0" />
-                <span>Submit News Draft</span>
+                <span>SUBMIT STORY</span>
               </NavLink>
             ) : (
-              <div className="rounded-xl bg-slate-100 border border-gray-150 px-3.5 py-2.5 text-[10.5px] text-slate-650 font-medium leading-relaxed w-full text-center lg:text-left flex items-center justify-center lg:justify-start gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-blue-600 shrink-0" />
-                <span>Accredited Student? Go to <Link to="/register" className="font-bold underline cursor-pointer text-blue-600 hover:text-blue-800">Register</Link> to request drafting keys.</span>
+              <div className="rounded-2xl glass-liquid border-white/60 px-5 py-3 text-[10px] text-slate-500 font-bold leading-relaxed w-full lg:w-auto flex items-center justify-center lg:justify-start gap-2 shadow-sm">
+                <Sparkles className="h-4 w-4 text-emerald-500 animate-pulse shrink-0" />
+                <span>Accredited? Request <Link to="/register" className="text-blue-600 hover:underline">Draft Keys</Link></span>
               </div>
             )}
           </div>
         </div>
+
 
         {/* Dynamic Inner Tab Router */}
         <AppRoutes />

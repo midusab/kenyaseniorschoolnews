@@ -4,6 +4,7 @@ import { articleService } from '../../services/articleService';
 import { NewsArticle } from '../../types';
 import { useAuth } from '../../context/AuthContext';
 import { MapPin, ShieldCheck, Heart, MessageSquare, ArrowLeft, Send, Check, ThumbsUp, Lightbulb, GraduationCap, Trophy } from 'lucide-react';
+import Loader from '../../components/ui/Loader';
 
 export default function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -70,11 +71,7 @@ export default function ArticlePage() {
   };
 
   if (loading) {
-    return (
-      <div className="py-20 text-center text-slate-500 font-mono text-xs">
-        Loading verified news bulletin...
-      </div>
-    );
+    return <Loader label="Opening official news bulletin..." size={32} className="py-24" />;
   }
 
   if (!article) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { NewsArticle, UserRole } from '../../types';
-import { ShieldCheck, Heart, Eye, MessageSquare, ArrowUpRight, Sparkles, AlertTriangle, Lock, Flame } from 'lucide-react';
+import { ShieldCheck, Heart, Eye, MessageSquare, ArrowUpRight, Sparkles, AlertTriangle, Lock, Flame, Clock } from 'lucide-react';
 
 interface ArticleCardProps {
   article: NewsArticle;
@@ -64,90 +64,90 @@ export default function ArticleCard({
 
   return (
     <article
-      className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition hover:border-blue-200 hover:shadow-md"
+      className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/60 bg-white/40 backdrop-blur-md transition-all duration-500 hover:border-blue-300 hover:shadow-liquid-hover hover:-translate-y-1"
       id={`article-card-${article.id}`}
     >
       {/* Image banner */}
       {article.image && (
-        <Link to={`/news/${article.id}`} className="relative h-48 w-full overflow-hidden bg-slate-100 block">
+        <Link to={`/news/${article.id}`} className="relative h-52 w-full overflow-hidden bg-slate-100 block liquid-shine">
           <img
             src={article.image}
             alt={article.title}
             referrerPolicy="no-referrer"
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-102"
+            className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
           />
-          <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5 animate-fade-in">
+          <div className="absolute top-4 right-4 flex flex-col items-end gap-2 animate-fade-in">
             {article.views > 100 && (
-              <span className="rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1 font-mono">
+              <span className="rounded-full bg-red-600 px-3 py-1 text-[9px] font-black text-white shadow-lg flex items-center gap-1.5 font-mono uppercase tracking-widest border border-red-500/50">
                 <Flame className="h-3 w-3" /> TRENDING
               </span>
             )}
-            <span className="rounded bg-blue-900/95 px-2.5 py-1 text-[10px] font-bold text-emerald-300 backdrop-blur-sm flex items-center gap-1 shadow-sm font-mono border border-blue-700">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400 inline" /> VERIFIED STAMP
+            <span className="rounded-full glass-liquid-dark px-3 py-1 text-[9px] font-black text-emerald-300 backdrop-blur-md flex items-center gap-1.5 shadow-lg font-mono border border-white/20 uppercase tracking-widest">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" /> VERIFIED
             </span>
-            {getRoleSpecificPill(article)}
           </div>
         </Link>
       )}
 
       {/* Card Content Wrapper */}
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider border ${getCategoryBadgeStyles(article.category)}`}>
+      <div className="flex flex-1 flex-col p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <span className={`rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-[0.1em] border shadow-xs ${getCategoryBadgeStyles(article.category)}`}>
             {article.category}
           </span>
-          <span className="text-[11px] font-mono text-gray-400 font-semibold">{article.date}</span>
+          <span className="text-[10px] font-bold text-slate-400 font-mono flex items-center gap-1">
+            <Clock className="h-3 w-3" /> {article.date}
+          </span>
         </div>
 
-        <div className="mt-2.5">
+        <div className="flex-1">
           <Link to={`/news/${article.id}`}>
-            <h3 className="font-display text-base font-bold text-gray-900 group-hover:text-blue-800 transition-colors line-clamp-2">
+            <h3 className="font-display text-lg font-black text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-2 tracking-tight leading-[1.2]">
               {article.title}
             </h3>
           </Link>
-          <p className="mt-2 text-xs text-gray-500 leading-relaxed line-clamp-3">
+          <p className="mt-2 text-xs text-slate-500 font-medium leading-relaxed line-clamp-3">
             {article.summary}
           </p>
         </div>
 
         {/* Sender Info / Action Button */}
-        <div className="mt-auto pt-4 border-t border-gray-50 flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-bold text-slate-900 font-mono tracking-wide block uppercase">
+        <div className="pt-4 border-t border-slate-100/60 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[9px] font-black text-slate-900 uppercase tracking-tight block truncate">
               {article.schoolName}
-            </span>
-            <span className="text-[10px] text-slate-500">
-              By: {article.authorName}
             </span>
           </div>
           <Link
             to={`/news/${article.id}`}
-            className="rounded bg-blue-50 group-hover:bg-blue-600 px-3 py-1.5 text-xs font-medium text-blue-800 group-hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+            className="rounded-full bg-slate-900 hover:bg-black px-4 py-2 text-[10px] font-black text-white transition-all cursor-pointer flex items-center gap-1.5 shrink-0 active:scale-95 shadow-lg shadow-slate-900/10"
           >
-            <span>Read Full</span> 
+            <span>READ</span> 
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
         {/* Reactions Counter Row */}
-        <div className="mt-3 flex items-center space-x-3 text-[10px] text-gray-400 font-mono font-medium pt-3 border-t border-gray-50">
-          <button 
-            onClick={() => onLike(article.id)}
-            className="flex items-center gap-1 hover:text-rose-600 transition-colors cursor-pointer"
-          >
-            <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-50" />
-            <span className="text-gray-500 hover:text-rose-600 font-bold">{article.likes}</span>
-          </button>
-          <span className="flex items-center gap-1">
-            <Eye className="h-3.5 w-3.5 text-gray-450" />
-            <span>{article.views}</span>
-          </span>
-          <span className="flex items-center gap-1">
-            <MessageSquare className="h-3.5 w-3.5 text-gray-450" />
-            <span>{article.comments.length} Comments</span>
+        <div className="mt-2 flex items-center justify-between text-[10px] font-bold font-mono pt-3 border-t border-slate-100/60">
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => onLike(article.id)}
+              className="flex items-center gap-1.5 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+            >
+              <Heart className="h-3.5 w-3.5 text-rose-500 fill-rose-500/10" />
+              <span>{article.likes}</span>
+            </button>
+            <span className="flex items-center gap-1.5 text-slate-400">
+              <Eye className="h-3.5 w-3.5" />
+              <span>{article.views}</span>
+            </span>
+          </div>
+          <span className="text-slate-400 uppercase text-[9px] tracking-tight">
+            {article.comments.length} Comments
           </span>
         </div>
       </div>
     </article>
+
   );
 }

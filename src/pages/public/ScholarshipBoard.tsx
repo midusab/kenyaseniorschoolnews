@@ -2,19 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { schoolService } from '../../services/schoolService';
 import { Scholarship } from '../../types';
 import { Award, ShieldCheck, ClipboardCheck, ArrowUpRight, CheckCircle, Goal, Zap, AlertCircle } from 'lucide-react';
+import Loader from '../../components/ui/Loader';
 
 export default function ScholarshipBoard() {
   const [scholarships, setScholarships] = useState<Scholarship[]>([]);
+  const [loading, setLoading] = useState(true);
   const [candidateScore, setCandidateScore] = useState<number>(70);
   const [selectedSch, setSelectedSch] = useState<string>('wings2fly');
   const [isVulnerable, setIsVulnerable] = useState<boolean>(true);
   const [hasSubCountyForm, setHasSubCountyForm] = useState<boolean>(true);
 
   useEffect(() => {
+    setLoading(true);
     schoolService.getScholarships().then((data) => {
       setScholarships(data);
-    });
+    }).finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return <Loader label="Verifying scholarship openings..." size={32} className="py-32" />;
+  }
 
   const selectedSchData = scholarships.find(s => s.id === selectedSch);
 

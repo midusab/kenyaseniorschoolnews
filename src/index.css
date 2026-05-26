@@ -11,6 +11,10 @@
   --color-brand-accent: #b45309; /* Deep Kenyan Amber/Gold */
   --color-brand-danger: #be123c; /* Kenyan Shield Red */
   --color-brand-dark: #121812; /* Foresty Charcoal tint */
+
+  /* Liquid Glass theme additions */
+  --shadow-liquid: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.1);
+  --shadow-liquid-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.2);
 }
 
 /* Base custom styles to guarantee a highly polished custom aesthetic */
@@ -26,6 +30,59 @@ body {
 
 .font-mono {
   font-family: var(--font-mono);
+}
+
+/* Apple Liquid Glass Utilities */
+.glass-liquid {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.glass-liquid-dark {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.1) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.liquid-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-shine::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  animation: liquid-shine-anim 10s infinite;
+}
+
+@keyframes liquid-shine-anim {
+  0% { transform: translate(-20%, -20%) rotate(0deg); }
+  50% { transform: translate(10%, 10%) rotate(5deg); }
+  100% { transform: translate(-20%, -20%) rotate(0deg); }
+}
+
+.shadow-liquid {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+.shadow-liquid-hover {
+  box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.4);
 }
 
 /* Custom hide scrollbar utilities for tickers and filter scrolls */
