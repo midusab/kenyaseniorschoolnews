@@ -78,7 +78,7 @@ export default function ArticleCard({
           />
           <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5 animate-fade-in">
             {article.views > 100 && (
-              <span className="rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1 font-mono animate-pulse">
+              <span className="rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white shadow-sm flex items-center gap-1 font-mono">
                 <Flame className="h-3 w-3" /> TRENDING
               </span>
             )}

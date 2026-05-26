@@ -64,7 +64,7 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
       <div className="rounded-2xl bg-gradient-to-br from-blue-900 via-slate-900 to-red-950 text-white p-6 sm:p-10 shadow-lg relative overflow-hidden" id="homepage-search-hero">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(220,38,38,0.12),transparent)]"></div>
         <div className="relative max-w-2xl space-y-4">
-          <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white font-mono border border-red-500 shadow-sm animate-pulse">
+          <span className="inline-flex items-center gap-1 rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white font-mono border border-red-500 shadow-sm">
             <Radio className="h-3.5 w-3.5" /> LIVE: OFFICIAL KSSNN FEED
           </span>
           <h2 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
@@ -111,7 +111,7 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
             <div className="space-y-4" id="section-featured-headline">
               <div className="flex items-center justify-between border-b border-gray-150 pb-2">
                 <h3 className="font-display text-sm font-bold tracking-wider text-slate-900 uppercase flex items-center gap-1.5/70">
-                  <span className="h-2 w-2 rounded-full bg-red-600 animate-pulse"></span>
+                  <span className="h-2 w-2 rounded-full bg-red-600"></span>
                   FEATURED BULLETIN
                 </h3>
                 <button
@@ -133,11 +133,8 @@ export default function Homepage({ onNavigate, onSelectArticle, onSelectCounty, 
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
                     <div className="absolute top-4 left-4 flex gap-2">
-                      <div className="bg-red-600 text-white font-mono font-bold text-[10px] uppercase rounded px-2.5 py-1 tracking-wider flex items-center gap-1 shadow-md">
-                         <Clock className="h-3 w-3" /> Breaking Now
-                      </div>
                       <div className="bg-emerald-600 text-white font-mono font-bold text-[10px] uppercase rounded px-2.5 py-1 tracking-wider flex items-center gap-1 shadow-md">
-                         <Sparkles className="h-3 w-3" /> Featured
+                         <Sparkles className="h-3 w-3" /> Featured update
                       </div>
                     </div>
                   </div>

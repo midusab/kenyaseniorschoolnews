@@ -41,7 +41,7 @@ export default function SchoolCard({ school }: SchoolCardProps) {
             <BadgeCheck className="h-3 w-3 text-emerald-700" /> MINISTRY STAMPED
           </span>
           {school.category === 'National' && (
-            <span className="rounded bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 shadow-xs border border-red-700 animate-pulse">
+            <span className="rounded bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 shadow-xs border border-red-700">
               NATIONAL CENTER
             </span>
           )}

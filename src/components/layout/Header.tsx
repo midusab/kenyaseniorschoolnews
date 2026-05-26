@@ -47,7 +47,7 @@ export default function Header() {
       {/* Top Ministry Portal Tape */}
       <div className="bg-blue-900 px-4 py-2 text-xs text-blue-100 sm:px-6 md:flex md:items-center md:justify-between" id="top-portal-strip">
         <div className="flex items-center space-x-2 font-mono">
-          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="inline-block h-2 w-2 rounded-full bg-emerald-500"></span>
           <span className="text-emerald-300">MOE & CBENT CERTIFIED DIGITAL PORTAL</span>
         </div>
         <div className="mt-1 flex items-center justify-between space-x-4 font-mono sm:mt-0 md:justify-end">
@@ -68,7 +68,7 @@ export default function Header() {
           <div>
             <div className="flex items-center space-x-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md">
-                <Radio className="h-5.5 w-5.5 animate-pulse text-emerald-300" />
+                <Radio className="h-5.5 w-5.5 text-emerald-300" />
               </div>
               <div>
                 <h1 className="font-display text-2xl font-bold tracking-tight text-blue-950 sm:text-3xl">
@@ -111,7 +111,7 @@ export default function Header() {
       <div className="bg-red-700 px-4 py-2 border-y border-red-800/20 text-xs font-medium text-white" id="announcement-ticker-ribbon">
         <div className="mx-auto max-w-7xl flex items-center space-x-3">
           <span className="flex items-center space-x-1 uppercase text-[10px] font-mono tracking-wider font-bold bg-white text-red-700 rounded px-2 py-0.5 whitespace-nowrap">
-            <Radio className="h-3 w-3 inline animate-pulse" /> BREAKING UPDATES
+            <Radio className="h-3 w-3 inline" /> BREAKING UPDATES
           </span>
           <div className="overflow-hidden relative w-full h-5">
             <div className="absolute left-0 top-0 w-full transition-all duration-500 ease-in-out">

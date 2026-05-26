@@ -58,7 +58,7 @@ function AppContent() {
 
             <NavLink
               to="/news"
-              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] relative ${
+              className={({ isActive }) => `rounded-xl px-4 py-3.5 text-xs font-bold transition-all flex items-center justify-center lg:justify-start space-x-2 border cursor-pointer min-h-[44px] ${
                 isActive
                   ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
                   : 'bg-white border-gray-200 text-slate-755 hover:border-blue-300 hover:text-blue-700 hover:bg-slate-50'
@@ -68,10 +68,6 @@ function AppContent() {
                 <>
                   <Newspaper className={`h-4.5 w-4.5 ${isActive ? 'text-white' : 'text-blue-600'}`} />
                   <span>News Bulletin</span>
-                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
-                  </span>
                 </>
               )}
             </NavLink>
@@ -136,7 +132,7 @@ function AppContent() {
                     : 'bg-blue-700 hover:bg-blue-805 text-white border border-blue-800'
                 }`}
               >
-                <div className="inline-block h-2.5 w-2.5 rounded-full bg-white animate-ping shrink-0"></div>
+                <div className="inline-block h-2.5 w-2.5 rounded-full bg-white shrink-0"></div>
                 <Radio className="h-4 w-4 text-white shrink-0" />
                 <span>Compose Official Update</span>
               </NavLink>
@@ -170,9 +166,7 @@ function AppContent() {
       <footer className="border-t border-red-900/20 bg-slate-950 py-10 px-4 text-center mt-auto font-mono text-[10.5px] text-white/50" id="kssnn-footer">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-             <div className="h-8 w-8 bg-red-700 rounded flex items-center justify-center text-white font-bold">
-               <Radio className="h-5 w-5" />
-             </div>
+             <div className="h-8 w-8 bg-red-700 rounded flex items-center justify-center text-white font-bold">K</div>
              <p className="text-left leading-relaxed">© 2026 Kenya Senior School News Network (KSSNN).<br/>Certified Ministry of Education Portal Outlet.</p>
           </div>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
